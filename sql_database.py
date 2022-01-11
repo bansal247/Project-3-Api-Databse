@@ -70,6 +70,9 @@ class SqlConnection:
         else:
             self.mydb.commit()
 
+    def add_value(self):
+        pass
+
     def add_values(self, vals, t_name):
         """
         :param t_name: name of table
@@ -104,6 +107,12 @@ class SqlConnection:
         except Exception as e:
             self.mydb.rollback()
             print(str(e))
+
+    def delete(self):
+        pass
+
+    def select(self):
+        pass
 
     def drop_table(self, t_name):
         try:
