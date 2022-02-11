@@ -1,6 +1,7 @@
 from sql_log_handler import LogDBHandler
 import mysql.connector as connection
 import logging
+import pandas as pd
 
 
 class Logger(logging.Logger):
@@ -28,6 +29,10 @@ class Logger(logging.Logger):
             print(e)
 
     def create_sql_connection(self):
+        """
+        This function creates sql connection
+        :return:
+        """
         try:
             self.mydb_conn = connection.connect(host="localhost", user="root", passwd="Shashu@247", use_pure=True)
             self.cursor = self.mydb_conn.cursor()
@@ -35,6 +40,10 @@ class Logger(logging.Logger):
             print(e)
 
     def create_db(self):
+        """
+        This function creates database
+        :return:
+        """
         try:
             self.cursor.execute("""create database if not exists {}""".format(self.db_name))
             self.cursor.execute("""use {}""".format(self.db_name))
@@ -42,6 +51,10 @@ class Logger(logging.Logger):
             print(e)
 
     def create_table(self):
+        """
+        This function creates table
+        :return:
+        """
         try:
             self.cursor.execute(
                 "create table if not exists {} (id bigint auto_increment primary key , log_level int null , "
@@ -55,6 +68,7 @@ class Logger(logging.Logger):
 
     def initialize(self):
         """
+        This function create connection then creates database then creates table then adds sql_handler
         :return:
         """
         try:
@@ -66,5 +80,39 @@ class Logger(logging.Logger):
             formatter = logging.Formatter('%(asctime)s', "%Y-%m-%d %H:%M:%S")
             self.log_h.setFormatter(formatter)
             self.addHandler(self.log_h)
+        except Exception as e:
+            print(e)
+
+    def get_csv_logfile(self, filename='logs'):
+        """
+        get csv log file
+        :param filename: default logs
+        :return:
+        """
+        try:
+            db = pd.read_sql("""select * from {}""".format(self.table_name), self.mydb_conn)
+            db.to_csv(filename + ".csv")
+        except Exception as e:
+            print(e)
+
+    def get_text_logfile(self, filename='logs'):
+        """
+        get .log logfile
+        :param filename: default logs
+        :return:
+        """
+        try:
+            db = pd.read_sql("select * from {}".format(self.table_name), self.mydb_conn)
+            db.to_csv(filename + ".log")
+        except Exception as e:
+            print(e)
+
+    def close_db(self):
+        """
+        To close the database
+        :return:
+        """
+        try:
+            self.mydb_conn.close()
         except Exception as e:
             print(e)

@@ -8,6 +8,8 @@ def try_it():
         1 / 0
     except Exception as e:
         logger.error(e, exc_info=True)
+    logger.get_text_logfile()
+    logger.get_csv_logfile()
 
 
 if __name__ == '__main__':
