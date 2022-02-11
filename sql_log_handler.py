@@ -45,7 +45,7 @@ class LogDBHandler(logging.Handler):
             )
 
             # Formatting Sql query
-            sql = "insert into {} values{}".format(self.db_tbl_log, values)
+            sql = """insert into {} values{}""".format(self.db_tbl_log, values)
             sql = sql.replace('(', '( default, ')
             sql = sql.replace(')', ', null)' if exc_text is None else ", '{}')".format(str(exc_text)))
 

@@ -1,15 +1,9 @@
-from sql_logger import Logger
+from sql_database import SqlConnection
 
 
 def try_it():
-    logger = Logger(host="localhost", user="root", passwd="Shashu@247", class_name="Main Class")
-    logger.initialize()
-    try:
-        1 / 0
-    except Exception as e:
-        logger.error(e, exc_info=True)
-    logger.get_text_logfile()
-    logger.get_csv_logfile()
+    mydb = SqlConnection(host="localhost", user="root", passwd="Shashu@247")
+    mydb.close_connection()
 
 
 if __name__ == '__main__':
